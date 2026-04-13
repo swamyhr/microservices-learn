@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +27,18 @@ public class EmployeeController {
 
     EmployeeDTO employee = employeeService.saveEmployee(employeeDTO);
     return new ResponseEntity<>(employee, HttpStatus.CREATED);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<EmployeeDTO> getEmployee(@PathVariable UUID id) {
+    EmployeeDTO employee = employeeService.getEmployee(id);
+    return new ResponseEntity<>(employee, HttpStatus.OK);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<EmployeeDTO>> getEmployees() {
+    List<EmployeeDTO> employeeList = employeeService.getAllEmployees();
+    return new ResponseEntity<>(employeeList, HttpStatus.OK);
   }
 
   @PutMapping("/update/{id}")
