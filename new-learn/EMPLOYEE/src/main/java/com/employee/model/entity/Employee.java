@@ -1,5 +1,6 @@
 package com.employee.model.entity;
 
+import com.employee.model.dto.EmployeeDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +12,7 @@ import java.util.UUID;
 public class Employee {
 
   @Id
-  @GeneratedValue(strategy= GenerationType.IDENTITY)
+  @GeneratedValue(strategy= GenerationType.UUID)
   private UUID id;
 
   private String name;
@@ -23,6 +24,10 @@ public class Employee {
 
   public UUID getId() {
     return id;
+  }
+
+  public Employee() {
+
   }
 
   public Employee(String name, String email, String code, String companyNamae) {

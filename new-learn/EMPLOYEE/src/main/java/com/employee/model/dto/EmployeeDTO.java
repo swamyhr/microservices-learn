@@ -14,6 +14,10 @@ public class EmployeeDTO {
     return id;
   }
 
+  public EmployeeDTO(){
+
+  }
+
   public EmployeeDTO(String name, String email, String code, String companyNamae) {
     this.name = name;
     this.email = email;

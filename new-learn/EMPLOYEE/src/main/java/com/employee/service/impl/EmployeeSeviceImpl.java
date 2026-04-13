@@ -44,7 +44,7 @@ public class EmployeeSeviceImpl implements EmployeeService {
       throw new RuntimeException("Employee ID must not be null");
     }
 
-    if (!Objects.equals(id, employeeDTO.getCode())) {
+    if (!Objects.equals(id, employeeDTO.getId())) {
       throw new RuntimeException("employee ID mismatch");
     }
 
