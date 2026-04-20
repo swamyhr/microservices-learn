@@ -1,5 +1,7 @@
 package com.employee.service.impl;
 
+import com.employee.exception.BadRequestException;
+import com.employee.exception.ResourceNotFoundException;
 import com.employee.model.dto.EmployeeDTO;
 import com.employee.model.entity.Employee;
 import com.employee.repository.EmployeeRepository;
@@ -41,15 +43,15 @@ public class EmployeeSeviceImpl implements EmployeeService {
   public EmployeeDTO updateEmployee(UUID id, EmployeeDTO employeeDTO) {
 
     if (id == null || employeeDTO.getId() == null) {
-      throw new RuntimeException("Employee ID must not be null");
+      throw new BadRequestException("Employee ID must not be null");
     }
 
     if (!Objects.equals(id, employeeDTO.getId())) {
-      throw new RuntimeException("employee ID mismatch");
+      throw new BadRequestException("employee ID mismatch");
     }
 
     employeeRepository.findById(id).orElseThrow(() ->
-        new RuntimeException("Employee Not Found"));
+        new ResourceNotFoundException("Employee Not Found"));
 
     Employee entity = modelMapper.map(employeeDTO, Employee.class);
     Employee updatedEmployee = employeeRepository.save(entity);
@@ -60,20 +62,23 @@ public class EmployeeSeviceImpl implements EmployeeService {
   @Override
   public void deleteEmployee(UUID id) {
     Employee employee = employeeRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Employee Not Found Exception"));
+        .orElseThrow(() -> new ResourceNotFoundException("Employee Not Found Exception"));
 
     employeeRepository.delete(employee);
   }
 
   @Override
   public EmployeeDTO getEmployee(UUID id) {
-    Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee Not Found"));
+    Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee Not Found"));
     return modelMapper.map(employee, EmployeeDTO.class);
   }
 
   @Override
   public List<EmployeeDTO> getAllEmployees() {
     List<Employee> employees = employeeRepository.findAll();
+    if(employees.isEmpty()) {
+      throw new ResourceNotFoundException("Employees list empty");
+    }
     return employees.stream().map(employee ->
         modelMapper.map(employee, EmployeeDTO.class)).toList();
   }
