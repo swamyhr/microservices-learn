@@ -1,5 +1,6 @@
 package com.adress.Address.service.impl;
 
+import com.adress.Address.exception.ResourceNotFoundException;
 import com.adress.Address.model.dto.AddressDTO;
 import com.adress.Address.model.dto.AddressRequest;
 import com.adress.Address.model.dto.AddressRequestDTO;
@@ -10,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,17 +71,29 @@ public class AddressServiceImpl implements AddressService {
 
   @Override
   public AddressDTO getSingleAddress(Long id) {
-    return null;
+    Address address = addressRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + id))
+;
+    return modelMapper.map(address, AddressDTO.class);
   }
 
   @Override
   public List<AddressDTO> getAllAddress() {
-    return null;
+    List<Address> allAddress = addressRepository.findAll();
+
+    if(allAddress.isEmpty()){
+      throw new ResourceNotFoundException("No address found");
+    }
+
+    return allAddress.stream().map(address -> modelMapper.map(address, AddressDTO.class)).toList();
   }
 
   @Override
   public void deleteAddress(Long id) {
 
+    Address address = addressRepository.findById(id).orElseThrow(() ->
+        new ResourceNotFoundException("Address not found with id " + id));
+
+    addressRepository.delete(address);
   }
 
   private List<Address> saveOrUpdateRequest(AddressRequest addressRequest) {
