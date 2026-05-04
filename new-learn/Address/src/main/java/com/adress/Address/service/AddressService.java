@@ -6,7 +6,7 @@ import com.adress.Address.model.dto.AddressRequest;
 import java.util.List;
 
 public interface AddressService {
-  AddressDTO saveAddress(AddressRequest addressRequest);
+  List<AddressDTO> saveAddress(AddressRequest addressRequest);
 
   AddressDTO updateAddress(AddressRequest addressRequest);
 

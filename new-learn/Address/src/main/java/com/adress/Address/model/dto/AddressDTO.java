@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 
 public class AddressDTO {
 
-  @Id
-  @GeneratedValue(strategy= GenerationType.AUTO)
   private Long id;
   private Long empId;
 
